@@ -1,19 +1,34 @@
-<?php 
-
-    include('db-connection.php');
-    $ID = $_GET['GetID'];
-    $query = " select * from currency_list where id='".$ID."'";
-    $result = mysqli_query($con,$query);
-
-    while($row=mysqli_fetch_assoc($result))
-    {
-        $id = $row['id'];
-        $currency_id = $row['currency_id'];
-        $currency_name = $row['currency_name'];
-        
+<?php
+include('db-connection.php'); 
+$status = "";
+if(isset($_POST['new']) && $_POST['new']==1&&$_GET['GetID']){
+    $trn_date = date("Y-m-d H:i:s");
+    $currency_symbol =$_REQUEST['currency_symbol'];
+    $currency_id =$_REQUEST['currency_id'];
+    $currency_name = $_REQUEST['currency_name'];
+    $id=$_GET['GetID'];
+    // $submittedby = $_SESSION["username"];
+    $ins_query="UPDATE currency_list SET currency_id = '$currency_id',
+     currency_symbol= '$currency_symbol', currency_name='$currency_name'
+    WHERE id = $id
+    ";
+    $res = $con->query($ins_query);
+   
+    if($con->error){
+    try {   
+        throw new Exception("MySQL error $con->error <br> Query:<br> $ins_query", $con->error);   
+    } catch(Exception $e ) {
+        echo "Error No: ".$e->getCode(). " - ". $e->getMessage() . "<br >";
+        echo nl2br($e->getTraceAsString());
     }
-
+    }
+    $status = "New Record Inserted Successfully.
+    </br></br><a href='view.php'>View Inserted Record</a>";
+}
 ?>
+
+
+
 
 
 <!doctype html>
@@ -52,49 +67,43 @@
       
      
     </ul>
-   
 </nav>
 <div >
   <br>
   <br>
 </div>
 <div class="raw">
-  
-  <div class="col">
-
+<div class="col">
     
-  <p><h1>are you realy want delete this record</h1></p>
 
+<div>
+<h1>Update Record of country</h1>
+<form name="form" method="post" action=""> 
+<input type="hidden" name="new" value="1" />
+ <?php  
+              $sql_query = "SELECT currency_id,currency_name,currency_symbol FROM currency_list where
+               id=".$_GET['GetID'];
+             
+              if ($result=mysqli_query($con,$sql_query))
+              {
+                 while ($currency_list = mysqli_fetch_assoc($result))
+                { 
+?>
+<p><input type="text" name="currency_symbol" placeholder="Enter currency_symbol" value="<?php echo $currency_list['currency_symbol']; ?>" required /></p>
+<p><input type="text" name="currency_id" placeholder="Enter currency_id" value="<?php echo $currency_list['currency_id']; ?>"  required /></p>
+<p><input type="text" name="currency_name" value="<?php echo $currency_list['currency_name']; ?>"  placeholder="Enter currency_name" required /></p>
 
-    <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">currency name</th>
-      <th scope="col">currency_symbol</th>
-      <th>delete</th>
-    </tr>
-  </thead>
-  <tbody>
-  
-    <tr>
-      <td><?php echo $id;?></td>
-      <td><?php echo $currency_id;?></td>
-      <td><?php echo $currency_name;?></td>
-      <td><a href="delete_country_del.php?GetID=<?php echo $id ?>"> <h2>Iam sure !! Confirm delete</h2></a></td>
-       
-    </tr>
-
-   
-  </tbody>
-</table>
-
-  </div>
-</div>
-
+<?php 
+}}
+?>
+<p><input name="submit" type="submit" value="Submit" /></p>
+</form>
+<p style="color:#FF0000;"><?php echo $status; ?></p>
 </div>
 </div>
-    </div>
+
+</div>
+
     
 
  <!-- Optional JavaScript -->

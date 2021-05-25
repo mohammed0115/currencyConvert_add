@@ -1,20 +1,3 @@
-<?php 
-
-    include('db-connection.php');
-    $ID = $_GET['GetID'];
-    $query = " select * from currency_list where id='".$ID."'";
-    $result = mysqli_query($con,$query);
-
-    while($row=mysqli_fetch_assoc($result))
-    {
-        $id = $row['id'];
-        $currency_id = $row['currency_id'];
-        $currency_name = $row['currency_name'];
-        
-    }
-
-?>
-
 
 <!doctype html>
 <html lang="en">
@@ -39,7 +22,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-  <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
       </li>
@@ -50,7 +33,7 @@
         <a class="nav-link" href="exchange.php">add country currency</a>
       </li>
       
-     
+   
     </ul>
    
 </nav>
@@ -62,9 +45,13 @@
   
   <div class="col">
 
-    
-  <p><h1>are you realy want delete this record</h1></p>
-
+    <?php include('db-connection.php'); 
+      $sql_query = "SELECT id,currency_id,currency_name FROM currency_list";
+      if ($result=mysqli_query($con,$sql_query))
+      {
+                 
+                
+   ?>
 
     <table class="table">
   <thead class="thead-dark">
@@ -72,20 +59,34 @@
       <th scope="col">id</th>
       <th scope="col">currency name</th>
       <th scope="col">currency_symbol</th>
-      <th>delete</th>
+      <th scope="col">currency rate per USD</th>
+ 
     </tr>
   </thead>
   <tbody>
-  
+    <?php
+    while ($currency_list = mysqli_fetch_assoc($result))
+    { 
+    ?>
     <tr>
-      <td><?php echo $id;?></td>
-      <td><?php echo $currency_id;?></td>
-      <td><?php echo $currency_name;?></td>
-      <td><a href="delete_country_del.php?GetID=<?php echo $id ?>"> <h2>Iam sure !! Confirm delete</h2></a></td>
-       
+     
+      <td><?php echo $currency_list['id'];?></td>
+      <td><?php echo $currency_list['currency_id'];?></td>
+      <td><?php echo $currency_list['currency_name'];?></td>
+      <form action="rate.php?">
+      <input type="hidden" name="id" id="id" value="<?php echo $currency_list['id']?>">
+      <td><input type="text" step="0.00001" name="rate" id="rate"></td>
+      <td> <button type="submit">update</button> </td>
+      </form>
+    </tr>
+   <?php
+     }}
+    ?>
+    <tr>
+      <td></td>
+      <td><a href="add_new_currency.php">add new country code </a></td>
     </tr>
 
-   
   </tbody>
 </table>
 

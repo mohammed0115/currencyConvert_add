@@ -1,15 +1,18 @@
 
+
 <!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+    
     <title>Hello, world!</title>
+    <script src="script.js"></script>
   </head>
   <body>
     <div class="container">
@@ -22,27 +25,18 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+  <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="add_country.php">add country currency</a>
       </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
+        <a class="nav-link" href="exchange.php">add rate currency</a>
       </li>
+      
+     
     </ul>
    
 </nav>
@@ -60,13 +54,13 @@
     <br><br>  
     <div class="row">
      
-      <form class="form-inline" >
+      <form class="form-inline" method="post" action="convert.php" >
         <div class="form-group classWithPad">
           <label for="Name2">From Currency &nbsp;&nbsp;</label>
           <select class="form-control" id="from_currency_id" required name="from_currency" style="width:170px;">
             <?php include('db-connection.php');?>
             <?php  
-              $sql_query = "SELECT currency_id,currency_name FROM currency_list";
+              $sql_query = "SELECT * FROM `exchange_rate` INNER JOIN currency_list on exchange_rate.cuId=currency_list.id ";
              
               if ($result=mysqli_query($con,$sql_query))
               {
@@ -88,7 +82,7 @@
           <label for="Email2">To Currency &nbsp;&nbsp;</label>
           <select class="form-control" id="to_currency_id" name="to_currency" required style="width:170px;">
            <?php  
-              $sql_query  = "SELECT currency_id,currency_name FROM currency_list";
+              $sql_query  = "SELECT * FROM `exchange_rate` INNER JOIN currency_list on exchange_rate.cuId=currency_list.id";
               if ($result = mysqli_query($con,$sql_query))
               {
                  
@@ -100,22 +94,18 @@
           </select>
         </div>
 
-         <div class="form-group classWithPad">
+         <!-- <div class="form-group classWithPad">
           <label for="Email2">Converted Amount&nbsp;</label>
           <input style="width:90px;" type="text" class="form-control" id="converted_amount_id" readonly="">
-        </div>
+        </div> -->
 
         <div class="form-group classWithPad">
-          <button type="button"  onclick="convertCurrency();" class="btn btn-danger">Convert</button>
+          <button type="submit"  onclick="convertCurrency();" class="btn btn-danger">Convert</button>
         </div>
       </form>
     </div>
     <br><br>
-    <div class="row">
-      <div style="margin:10px 10px 10px 10px;">
-        <a class="btn btn-default read-more" style="background:#DA4453;color:white" href="http://www.phpzag.com/generate-user-initial-avatar-with-php-mysql/">Back To Tutorial</a>    
-      </div>
-    </div>
+ 
   </div>  
 </div>  
    
@@ -126,7 +116,7 @@
 </div>
     </div>
     
-
+    
  <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

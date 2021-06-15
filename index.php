@@ -50,7 +50,14 @@
    
 <div class="content">
   <div class="container-fluid">
-    <h2>Currency Converter Using PHP</h2>   
+    <h2>Currency Converter Using PHP</h2>
+
+    <video width="500" controls>
+  <source src="Easy Currency Converter app for mobile.mp4" type="video/mp4">
+  Your browser does not support HTML video.
+</video>
+
+
     <br><br>  
     <div class="row">
      
